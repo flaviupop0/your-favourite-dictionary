@@ -1,0 +1,13 @@
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #aaa;
+}
+
+.input-container {
+    position: relative;
+    margin-bottom: 20px;
+}
