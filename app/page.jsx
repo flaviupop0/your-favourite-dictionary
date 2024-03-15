@@ -36,7 +36,7 @@ const Home = () => {
                     </ul>
                 </div>
             </nav>
-            <div className="flex-grow">{/* Your content here */}</div>
+            <div className="flex-grow">{}</div>
         </div>
     );
 };

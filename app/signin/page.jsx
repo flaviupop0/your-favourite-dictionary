@@ -17,7 +17,6 @@ const SignIn = () => {
     const handleSignIn = async () => {
         try {
             const res = await signInWithEmailAndPassword(email, password);
-            console.log({ res });
             setEmail("");
             setPassword("");
             if (res.user) {
@@ -38,10 +37,9 @@ const SignIn = () => {
         const provider = new GoogleAuthProvider();
         try {
             const result = await signInWithPopup(auth, provider);
-            console.log({ result });
             router.push("/");
         } catch (error) {
-            console.error("Error signing in with Google:", error);
+            setErrorMessage("Error signing in with Google");
         }
     };
 

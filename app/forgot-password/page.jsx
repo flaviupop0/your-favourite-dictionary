@@ -13,7 +13,8 @@ export default function ForgotPassword() {
             await sendPasswordResetEmail(auth, email);
             setEmailSent(true);
         } catch (error) {
-            console.error("Error sending password reset email:", error);
+            setEmailSent(false);
+            //still in work
         }
     };
 

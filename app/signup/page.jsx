@@ -18,12 +18,7 @@ const Register = () => {
 
     const handleRegister = async () => {
         try {
-            /*const minAge = 18;
-            if (parseInt(age) < minAge || !age) {
-                throw new Error("You're too young to use this application");
-            } */
             const res = await createUserWithEmailAndPassword(email, password);
-            console.log({ res });
             setEmail("");
             setPassword("");
             setName("");
@@ -37,7 +32,7 @@ const Register = () => {
                 setErrorMessage("The Email you entered is invalid or this account already exists.");
             }
         } catch (e) {
-            console.error("Error registering user:", e);
+            setErrorMessage("The Email you entered is invalid or this account already exists.");
         }
     };
 
