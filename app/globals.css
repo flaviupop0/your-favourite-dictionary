@@ -50,5 +50,5 @@ body {
 }
 
 .customIcons:hover {
-    background-color: #4b5563; /* Equivalent to gray-600 in Tailwind */
+    background-color: #4b5563;
 }

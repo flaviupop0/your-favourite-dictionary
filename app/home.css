@@ -43,22 +43,3 @@
 .signOutButton:hover {
     background-color: rgb(185 28 28);
 }
-
-.customIcons {
-    background-color: transparent;
-    padding-top: 0.25rem; /* Equivalent to 1 in Tailwind */
-    padding-bottom: 0.25rem; /* Equivalent to 1 in Tailwind */
-    padding-left: 0.25rem; /* Equivalent to 1 in Tailwind */
-    padding-right: 0.25rem; /* Equivalent to 1 in Tailwind */
-    border-width: 1px; /* Equivalent to border in Tailwind */
-    border-style: solid; /* Equivalent to border in Tailwind */
-    border-color: white; /* Equivalent to border-white in Tailwind */
-    border-radius: 9999px; /* Large value to create a circular shape */
-    display: flex; /* Equivalent to flex in Tailwind */
-    align-items: center; /* Equivalent to items-center in Tailwind */
-    font-weight: 600; /* Equivalent to semibold in Tailwind */
-}
-
-.customIcons:hover {
-    background-color: #4b5563; /* Equivalent to gray-600 in Tailwind */
-}
