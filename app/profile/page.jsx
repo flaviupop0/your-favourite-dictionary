@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { auth, db } from "../firebase/config";
 import { FaHome } from "react-icons/fa";
-import Link from "next/link";
 import { doc, getDoc } from "firebase/firestore";
+import CustomButton from "../components/CustomButton/CustomButton.jsx";
 
 const ProfilePage = () => {
     const router = useRouter();
@@ -56,20 +56,16 @@ const ProfilePage = () => {
                 <div className="container mx-auto flex justify-between items-center">
                     <div className="flex items-center">
                         {user && (
-                            <Link href="/">
-                                <button className="bg-transparent hover:bg-gray-600 font-semibold py-1 px-1 border border-white rounded-full flex items-center">
-                                    <FaHome size="30px" />
-                                </button>
-                            </Link>
+                            <button onClick={() => router.push("/")} className="bg-transparent hover:bg-gray-600 font-semibold py-1 px-1 border border-white rounded-full flex items-center">
+                                <FaHome size="30px" />
+                            </button>
                         )}
                         <h1 className="text-white text-lg ml-4">This is your profile page, {user.displayName}</h1>
                     </div>
                     <ul className="flex space-x-4">
-                        <li>
-                            <button onClick={handleLogout} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full">
-                                Logout
-                            </button>
-                        </li>
+                        <CustomButton onClick={handleLogout} className="signOutButton">
+                            Sign out
+                        </CustomButton>
                     </ul>
                 </div>
             </nav>

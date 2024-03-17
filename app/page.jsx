@@ -2,10 +2,12 @@
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config";
 import { FaRegUserCircle } from "react-icons/fa";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import CustomButton from "./components/CustomButton/CustomButton.jsx";
 import "./home.css";
 
 const Home = () => {
+    const router = useRouter();
     const [user] = useAuthState(auth);
 
     return (
@@ -14,33 +16,25 @@ const Home = () => {
                 <div className="container mx-auto flex justify-between items-center">
                     <div className="flex items-center">
                         {user && (
-                            <Link href="/profile">
-                                <button className="bg-transparent hover:bg-gray-600 font-semibold py-1 px-1 border border-white rounded-full flex items-center">
-                                    <FaRegUserCircle size="30px" />
-                                </button>
-                            </Link>
+                            <button onClick={() => router.push("/profile")} className="bg-transparent hover:bg-gray-600 font-semibold py-1 px-1 border border-white rounded-full flex items-center">
+                                <FaRegUserCircle size="30px" />
+                            </button>
                         )}
                         <h1 className="text-white text-lg ml-4">{user ? `Welcome ${user.displayName}` : "Your Awesome Dictionary"}</h1>
                     </div>
                     <ul className="flex space-x-4">
                         {user ? (
-                            <li>
-                                <button onClick={() => auth.signOut()} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full">
-                                    Logout
-                                </button>
-                            </li>
+                            <CustomButton onClick={() => auth.signOut()} className="signOutButton">
+                                Sign out
+                            </CustomButton>
                         ) : (
                             <>
-                                <li>
-                                    <Link href="/signup">
-                                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">Register</button>
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link href="/signin">
-                                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">Login</button>
-                                    </Link>
-                                </li>
+                                <CustomButton onClick={() => router.push("/signup")} className="customButton">
+                                    Register
+                                </CustomButton>
+                                <CustomButton onClick={() => router.push("/signin")} className="customButton">
+                                    Login
+                                </CustomButton>
                             </>
                         )}
                     </ul>

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { auth } from "@/app/firebase/config";
 import { sendPasswordResetEmail } from "firebase/auth";
 import FormInput from "../components/FormInput/FormInput.jsx";
+import CustomButton from "../components/CustomButton/CustomButton.jsx";
 import "./page.css";
 
 export default function ForgotPassword() {
@@ -30,9 +31,9 @@ export default function ForgotPassword() {
                         <div>
                             <FormInput type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                         </div>
-                        <button onClick={resetEmail} disabled={!email} className="disabled:opacity-40 bg-blue-500 hover:bg-blue-700 rounded-full px-3 py-1.5 text-white font-bold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
+                        <CustomButton onClick={resetEmail} disabled={!email} className="customButton">
                             Send Reset Password Email
-                        </button>
+                        </CustomButton>
                     </div>
                 )}
             </div>

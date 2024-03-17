@@ -11,18 +11,3 @@
     position: relative;
     margin-bottom: 20px;
 }
-
-.customButton {
-    opacity: 1;
-    background-color: rgb(59 130 246);
-    cursor: pointer;
-}
-
-.customButton:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
-
-.customButton:hover {
-    background-color: rgb(29 78 216);
-}
