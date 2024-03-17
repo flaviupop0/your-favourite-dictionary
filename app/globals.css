@@ -41,3 +41,14 @@ body {
     opacity: 0.4;
     cursor: not-allowed;
 }
+
+.customIcons {
+    background-color: transparent;
+    padding: 0.25rem;
+    border-style: solid;
+    border-color: white;
+}
+
+.customIcons:hover {
+    background-color: #4b5563; /* Equivalent to gray-600 in Tailwind */
+}
