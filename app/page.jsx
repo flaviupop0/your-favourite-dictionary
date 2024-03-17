@@ -1,49 +1,58 @@
 "use client";
+import { React, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config";
-import { FaRegUserCircle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import CustomButton from "./components/CustomButton/CustomButton.jsx";
 import { HiLibrary } from "react-icons/hi";
+import CustomButton from "./components/CustomButton/CustomButton.jsx";
+import NavBar from "./components/NavBar/navbar.jsx";
+import SlidingMenu from "./components/SlidingMenu/SlidingMenu.jsx";
 import "./home.css";
+import MenuButton from "./components/MenuButton/MenuButton.jsx";
 
 const Home = () => {
     const router = useRouter();
     const [user] = useAuthState(auth);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const isOpen = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <div className="min-h-screen bg-white flex flex-col">
-            <nav className="bg-gray-800 p-4">
-                <div className="container mx-auto flex justify-between items-center">
-                    <div className="flex items-center">
-                        {!user && <HiLibrary size="40px" className="customIcons" />}
-                        {user && (
-                            <button onClick={() => router.push("/profile")} className="customIcons">
-                                <FaRegUserCircle size="30px" />
-                            </button>
-                        )}
-                        <h1 className="text-white text-lg ml-4">{user ? `Welcome ${user.displayName}` : "Your Awesome Dictionary"}</h1>
-                    </div>
-
-                    <ul className="flex space-x-4">
-                        {user ? (
-                            <CustomButton onClick={() => auth.signOut()} className="signOutButton">
-                                Sign out
+            <NavBar user={user} router={router}>
+                {!user && <HiLibrary size="40px" className="customIcons" />}
+                {user && (
+                    <>
+                        <MenuButton onClick={handleClick} />
+                        <SlidingMenu anchorEl={anchorEl} open={isOpen} onClose={handleClose} firstHref="./profile" firstText="Profile" />
+                    </>
+                )}
+                <h1 className="text-white text-lg ml-4">{user ? `Welcome ${user.displayName}` : "Your Awesome Dictionary"}</h1>
+                <ul className="flex space-x-4">
+                    {user ? (
+                        <CustomButton onClick={() => auth.signOut()} className="signOutButton">
+                            Sign out
+                        </CustomButton>
+                    ) : (
+                        <>
+                            <CustomButton onClick={() => router.push("/signup")} className="customButton">
+                                Register
                             </CustomButton>
-                        ) : (
-                            <>
-                                <CustomButton onClick={() => router.push("/signup")} className="customButton">
-                                    Register
-                                </CustomButton>
-                                <CustomButton onClick={() => router.push("/signin")} className="customButton">
-                                    Login
-                                </CustomButton>
-                            </>
-                        )}
-                    </ul>
-                </div>
-            </nav>
-            <div className="flex-grow">{}</div>
+                            <CustomButton onClick={() => router.push("/signin")} className="customButton">
+                                Login
+                            </CustomButton>
+                        </>
+                    )}
+                </ul>
+            </NavBar>
+            <div className="flex-grow">{/* Other content */}</div>
         </div>
     );
 };

@@ -43,10 +43,11 @@ body {
 }
 
 .customIcons {
-    background-color: transparent;
     padding: 0.25rem;
+    border-width: 1px;
     border-style: solid;
     border-color: white;
+    border-radius: 9999px;
 }
 
 .customIcons:hover {

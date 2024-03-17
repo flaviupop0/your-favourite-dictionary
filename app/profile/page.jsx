@@ -2,40 +2,48 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { auth, db } from "../firebase/config";
-import { FaHome } from "react-icons/fa";
 import { doc, getDoc } from "firebase/firestore";
+import MenuButton from "../components/MenuButton/MenuButton";
+import SlidingMenu from "../components/SlidingMenu/SlidingMenu";
 import CustomButton from "../components/CustomButton/CustomButton.jsx";
+import NavBar from "../components/NavBar/navbar.jsx";
+import "./styles.css";
 
 const ProfilePage = () => {
     const router = useRouter();
     const [userProfile, setUserProfile] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [anchorEl, setAnchorEl] = useState(null);
     const user = auth.currentUser;
+    const isOpen = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     useEffect(() => {
-        const fetchUserProfile = async () => {
-            try {
-                const userDocRef = doc(db, "users", user.uid);
-                const userDocSnapshot = await getDoc(userDocRef);
-                if (userDocSnapshot.exists()) {
-                    const userData = userDocSnapshot.data();
-                    setUserProfile(userData);
-                    console.log(auth.currentUser.uid);
-                } else {
-                    console.error("User document not found");
-                }
-                setLoading(false);
-            } catch (error) {
-                console.error("Error fetching user profile:", error);
+        const unsubscribe = auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                try {
+                    const userDocRef = doc(db, "users", user.uid);
+                    const userDocSnapshot = await getDoc(userDocRef);
+                    if (userDocSnapshot.exists()) {
+                        const userData = userDocSnapshot.data();
+                        setUserProfile(userData);
+                    }
+                } catch (error) {}
+            } else {
+                router.push("/signin");
             }
-        };
+            setLoading(false);
+        });
 
-        if (user) {
-            fetchUserProfile();
-        } else {
-            router.push("/signin");
-        }
-    }, [user, router]);
+        return unsubscribe;
+    }, [router]);
 
     const handleLogout = async () => {
         try {
@@ -52,23 +60,18 @@ const ProfilePage = () => {
 
     return (
         <div className="min-h-screen bg-white flex flex-col">
-            <nav className="bg-gray-800 p-4">
-                <div className="container mx-auto flex justify-between items-center">
-                    <div className="flex items-center">
-                        {user && (
-                            <button onClick={() => router.push("/")} className="bg-transparent hover:bg-gray-600 font-semibold py-1 px-1 border border-white rounded-full flex items-center">
-                                <FaHome size="30px" />
-                            </button>
-                        )}
-                        <h1 className="text-white text-lg ml-4">This is your profile page, {user.displayName}</h1>
-                    </div>
-                    <ul className="flex space-x-4">
-                        <CustomButton onClick={handleLogout} className="signOutButton">
-                            Sign out
-                        </CustomButton>
-                    </ul>
-                </div>
-            </nav>
+            <NavBar>
+                <>
+                    <MenuButton onClick={handleClick} />
+                    <SlidingMenu anchorEl={anchorEl} open={isOpen} onClose={handleClose} firstHref="/" firstText="Home" />
+                </>
+                <h1 className="text-white text-lg ml-4">This is your profile page, {user.displayName}</h1>
+                <ul className="flex space-x-4">
+                    <CustomButton onClick={handleLogout} className="signOutButton">
+                        Sign out
+                    </CustomButton>
+                </ul>
+            </NavBar>
             <div className="content" style={{ border: "1px solid red", padding: "10px", color: "black" }}>
                 <h2 className="subtitle">Account Information</h2>
                 <p>
