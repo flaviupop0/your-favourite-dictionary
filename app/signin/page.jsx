@@ -5,6 +5,7 @@ import { auth } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import FormInput from "../components/FormInput/FormInput.jsx";
+import CustomButton from "../components/CustomButton/CustomButton.jsx";
 import "./page.css";
 
 const SignIn = () => {
@@ -50,25 +51,25 @@ const SignIn = () => {
                 <h1 className="text-white text-2xl mb-5">Sign In</h1>
                 <FormInput type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 <div className="input-container">
-                    <FormInput type={showPassword ? "text" : "password"} placeholder="Password" value={password} onChange={(e) => setPassword(e.targe.value)} />
+                    <FormInput type={showPassword ? "text" : "password"} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     <span className="toggle-password" onClick={togglePasswordVisibility}>
                         {showPassword ? "Hide" : "Show"}
                     </span>
                 </div>
                 <p className="text-red-500 mb-4">{errorMessage}</p>
                 <div className="flex justify-between">
-                    <button onClick={handleSignIn} disabled={!email || !password} className="disabled:opacity-40 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-                        Sign In
-                    </button>
-                    <button onClick={() => router.push("/forgot-password")} className="opacity-40 bg-blue-500 hover:opacity-100 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-                        Forgot Password?
-                    </button>
+                    <CustomButton onClick={handleSignIn} disabled={!email || !password} className="customButton">
+                        Sign in
+                    </CustomButton>
+                    <CustomButton onClick={() => router.push("/forgot-password")} className="customButton">
+                        Forgot password?
+                    </CustomButton>
                 </div>
                 <div style={{ paddingTop: "10px" }}>
-                    <button onClick={handleGoogleSignIn} className="flex w-full justify-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full">
+                    <CustomButton onClick={handleGoogleSignIn} className="googleButton">
                         <img src="/google.svg" alt="Google Logo" className="w-6 h-6 mr-2" />
                         Sign In with Google
-                    </button>
+                    </CustomButton>
                 </div>
             </div>
         </div>

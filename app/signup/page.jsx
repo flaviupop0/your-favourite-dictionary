@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { getAuth, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import FormInput from "../components/FormInput/FormInput.jsx";
+import CustomButton from "../components/CustomButton/CustomButton.jsx";
 import "./page.css";
 
 const Register = () => {
@@ -56,25 +57,25 @@ const Register = () => {
         <div className="min-h-screen flex items-center justify-center bg-gray-900">
             <div className="bg-gray-800 p-10 rounded-lg shadow-xl w-96">
                 <h1 className="text-white text-2xl mb-5">Sign Up</h1>
-                <FormInput type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.targe.value)} />
-                <FormInput type="text" placeholder="Name" value={name} onChange={(e) => setName(e.targe.value)} />
-                <FormInput type="text" placeholder="Last Name" value={surName} onChange={(e) => setSurName(e.targe.value)} />
-                <FormInput type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.targe.value)} />
-                <FormInput type="text" placeholder="Name" value={name} onChange={(e) => setName(e.targe.value)} />
+                <FormInput type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                <FormInput type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
+                <FormInput type="text" placeholder="Last Name" value={surName} onChange={(e) => setSurName(e.target.value)} />
+                <FormInput type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 <div className="input-container">
-                    <FormInput type={showPassword ? "text" : "password"} placeholder="Password" value={password} onChange={(e) => setPassword(e.targe.value)} />
+                    <FormInput type={showPassword ? "text" : "password"} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     <span className="toggle-password" onClick={togglePasswordVisibility}>
                         {showPassword ? "Hide" : "Show"}
                     </span>
                 </div>
                 <p className="text-red-500 mb-4">{errorMessage}</p>
                 <div className="flex justify-between">
-                    <button onClick={handleRegister} disabled={!username || !name || !surName || !email || !password} className="disabled:opacity-40 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                    <CustomButton onClick={handleRegister} disabled={!username || !name || !surName || !email || !password} className="customButton">
+                        {" "}
                         Register
-                    </button>
-                    <button onClick={() => router.push("/signin")} className="opacity-40 bg-blue-500 hover:opacity-100 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-                        Login here!
-                    </button>
+                    </CustomButton>
+                    <CustomButton onClick={() => router.push("/signin")} className="customButton">
+                        Login here
+                    </CustomButton>
                 </div>
             </div>
         </div>
