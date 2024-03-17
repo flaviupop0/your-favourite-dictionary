@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { auth } from "@/app/firebase/config";
 import { sendPasswordResetEmail } from "firebase/auth";
+import FormInput from "../components/FormInput/FormInput.jsx";
 import "./page.css";
 
 export default function ForgotPassword() {
@@ -27,7 +28,7 @@ export default function ForgotPassword() {
                 ) : (
                     <div className="input-container">
                         <div>
-                            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500" />
+                            <FormInput type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                         </div>
                         <button onClick={resetEmail} disabled={!email} className="disabled:opacity-40 bg-blue-500 hover:bg-blue-700 rounded-full px-3 py-1.5 text-white font-bold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
                             Send Reset Password Email

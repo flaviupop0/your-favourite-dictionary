@@ -5,9 +5,11 @@ import { auth, db } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
 import { getAuth, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import FormInput from "../components/FormInput/FormInput.jsx";
 import "./page.css";
 
 const Register = () => {
+    const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
@@ -15,7 +17,6 @@ const Register = () => {
     const [username, setUsername] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    const router = useRouter();
     const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
 
     const handleRegister = async () => {
@@ -55,12 +56,13 @@ const Register = () => {
         <div className="min-h-screen flex items-center justify-center bg-gray-900">
             <div className="bg-gray-800 p-10 rounded-lg shadow-xl w-96">
                 <h1 className="text-white text-2xl mb-5">Sign Up</h1>
-                <input type="email" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500" />
-                <input type="email" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500" />
-                <input type="email" placeholder="Last Name" value={surName} onChange={(e) => setSurName(e.target.value)} className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500" />
-                <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500" />
+                <FormInput type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.targe.value)} />
+                <FormInput type="text" placeholder="Name" value={name} onChange={(e) => setName(e.targe.value)} />
+                <FormInput type="text" placeholder="Last Name" value={surName} onChange={(e) => setSurName(e.targe.value)} />
+                <FormInput type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.targe.value)} />
+                <FormInput type="text" placeholder="Name" value={name} onChange={(e) => setName(e.targe.value)} />
                 <div className="input-container">
-                    <input type={showPassword ? "text" : "password"} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-3  bg-gray-700 rounded outline-none text-white placeholder-gray-500 input-field" />
+                    <FormInput type={showPassword ? "text" : "password"} placeholder="Password" value={password} onChange={(e) => setPassword(e.targe.value)} />
                     <span className="toggle-password" onClick={togglePasswordVisibility}>
                         {showPassword ? "Hide" : "Show"}
                     </span>
