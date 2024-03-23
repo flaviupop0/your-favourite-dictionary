@@ -34,6 +34,7 @@ const Register = () => {
                     username: username,
                     firstName: name,
                     lastName: surName,
+                    profileImage: null,
                 });
                 router.push("/signin");
             } else {
