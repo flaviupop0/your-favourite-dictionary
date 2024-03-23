@@ -1,14 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { auth, db, storage, uploadBytes } from "../firebase/config";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { ref, getDownloadURL } from "firebase/storage";
+import { auth, db } from "../firebase/config";
+import { doc, getDoc } from "firebase/firestore";
 import MenuButton from "../components/MenuButton/MenuButton";
 import SlidingMenu from "../components/SlidingMenu/SlidingMenu";
 import CustomButton from "../components/CustomButton/CustomButton.jsx";
 import NavBar from "../components/NavBar/navbar.jsx";
 import ChangeProfilePictureModal from "../components/ChangeProfilePictureModal/ChangeProfilePictureModal.jsx";
+import EditPersonalInfoModal from "../components/EditPersonalInfoModal/EditPersonalInfoModal.jsx";
 import "./styles.css";
 
 const ProfilePage = () => {
@@ -16,15 +16,14 @@ const ProfilePage = () => {
     const [loading, setLoading] = useState(true);
     const [isOpenMenu, setIsOpenMenu] = useState(false);
     const [isOpenModal, setIsOpenModal] = useState(false);
-    const [image, setImage] = useState(null);
-    const [uploading, setUploading] = useState(false);
-    const [previewURL, setPreviewURL] = useState(null);
+    const [isOpenEditModal, setIsOpenEditModal] = useState(false);
     const [userProfile, setUserProfile] = useState(null);
-    const user = auth.currentUser;
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
             if (user) {
+                setUser(user);
                 try {
                     const userDocRef = doc(db, "users", user.uid);
                     const userDocSnapshot = await getDoc(userDocRef);
@@ -32,7 +31,10 @@ const ProfilePage = () => {
                         const userData = userDocSnapshot.data();
                         setUserProfile(userData);
                     }
-                } catch {}
+                } catch (error) {
+                    console.error("Error fetching user profile:", error);
+                    setError("Failed to fetch user profile");
+                }
             } else {
                 router.push("/signin");
             }
@@ -48,48 +50,17 @@ const ProfilePage = () => {
             router.push("/signin");
         } catch (error) {
             console.error("Error signing out:", error);
+            setError("Failed to sign out");
         }
     };
 
-    const handleImageChange = (event) => {
-        const file = event.target.files[0];
-        setImage(file);
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setPreviewURL(reader.result);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            setPreviewURL(null);
-        }
-    };
-
-    const handleUpload = async () => {
-        if (!image) {
-            return;
-        }
-
-        setUploading(true);
-        try {
-            const storageRef = ref(storage, `profileImages/${user.uid}/${image.name}`);
-            await uploadBytes(storageRef, image);
-            const imageUrl = await getDownloadURL(storageRef);
-            const userDocRef = doc(db, "users", user.uid);
-            await setDoc(userDocRef, { ...userProfile, profileImage: imageUrl }, { merge: true });
-            const userDocSnapshot = await getDoc(userDocRef);
-            if (userDocSnapshot.exists()) {
-                const userData = userDocSnapshot.data();
-                setUserProfile(userData);
-            }
-        } catch (error) {}
-        setUploading(false);
+    const handleEditProfile = () => {
+        setIsOpenEditModal(true);
     };
 
     if (loading) {
         return <div>Loading...</div>;
     }
-
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col">
             <NavBar>
@@ -118,7 +89,7 @@ const ProfilePage = () => {
                                 </div>
                             </>
                         )}
-                        <ChangeProfilePictureModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} handleImageChange={handleImageChange} handleUpload={handleUpload} image={image} uploading={uploading} previewURL={previewURL} />
+                        <ChangeProfilePictureModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} user={user} userProfile={userProfile} setUserProfile={setUserProfile} />
                     </div>
                     <div className="p-4 flex-grow">
                         <h2 className="text-xl font-semibold text-gray-800 mb-2">Account Information</h2>
@@ -136,11 +107,15 @@ const ProfilePage = () => {
                                 <p className="text-sm text-gray-600">
                                     <strong>Email:</strong> {user.email}
                                 </p>
+                                <CustomButton onClick={handleEditProfile} className="customButton">
+                                    Edit Personal Information
+                                </CustomButton>
                             </div>
                         )}
                     </div>
                 </div>
             </div>
+            <EditPersonalInfoModal isOpen={isOpenEditModal} onClose={() => setIsOpenEditModal(false)} user={user} userProfile={userProfile} />
         </div>
     );
 };
