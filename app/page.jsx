@@ -7,8 +7,8 @@ import { HiLibrary } from "react-icons/hi";
 import CustomButton from "./components/CustomButton/CustomButton.jsx";
 import NavBar from "./components/NavBar/navbar.jsx";
 import SlidingMenu from "./components/SlidingMenu/SlidingMenu.jsx";
-import "./home.css";
 import MenuButton from "./components/MenuButton/MenuButton.jsx";
+import "./home.css";
 
 const Home = () => {
     const router = useRouter();
