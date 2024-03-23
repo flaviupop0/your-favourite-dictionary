@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { auth, db, storage, uploadBytes } from "../firebase/config";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -8,18 +8,18 @@ import MenuButton from "../components/MenuButton/MenuButton";
 import SlidingMenu from "../components/SlidingMenu/SlidingMenu";
 import CustomButton from "../components/CustomButton/CustomButton.jsx";
 import NavBar from "../components/NavBar/navbar.jsx";
+import ChangeProfilePictureModal from "../components/ChangeProfilePictureModal/ChangeProfilePictureModal.jsx";
 import "./styles.css";
 
 const ProfilePage = () => {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
-    const [anchorEl, setAnchorEl] = useState(null);
-    const isOpen = Boolean(anchorEl);
+    const [isOpenMenu, setIsOpenMenu] = useState(false);
+    const [isOpenModal, setIsOpenModal] = useState(false);
     const [image, setImage] = useState(null);
     const [uploading, setUploading] = useState(false);
     const [previewURL, setPreviewURL] = useState(null);
     const [userProfile, setUserProfile] = useState(null);
-    const fileInputRef = useRef(null);
     const user = auth.currentUser;
 
     useEffect(() => {
@@ -46,7 +46,9 @@ const ProfilePage = () => {
         try {
             await auth.signOut();
             router.push("/signin");
-        } catch (error) {}
+        } catch (error) {
+            console.error("Error signing out:", error);
+        }
     };
 
     const handleImageChange = (event) => {
@@ -92,8 +94,8 @@ const ProfilePage = () => {
         <div className="min-h-screen bg-gray-100 flex flex-col">
             <NavBar>
                 <>
-                    <MenuButton onClick={(event) => setAnchorEl(event.currentTarget)} />
-                    <SlidingMenu anchorEl={anchorEl} open={isOpen} onClose={() => setAnchorEl(null)} firstHref="/" firstText="Home" />
+                    <MenuButton onClick={() => setIsOpenMenu(!isOpenMenu)} />
+                    <SlidingMenu anchorEl={isOpenMenu} open={isOpenMenu} onClose={() => setIsOpenMenu(false)} firstHref="/" firstText="Home" />
                 </>
                 <h1 className="text-white text-lg ml-4">This is your profile page, {user ? user.displayName : ""}</h1>
                 <ul className="flex space-x-4">
@@ -106,32 +108,21 @@ const ProfilePage = () => {
                 <div className="bg-white rounded-lg shadow-md overflow-hidden flex">
                     <div className="p-4 flex-shrink-0">
                         <h2 className="text-xl font-semibold text-gray-800 mb-2">Profile Image</h2>
-                        <div className="mb-4">
-                            <input type="file" accept="image/*" onChange={handleImageChange} style={{ display: "none" }} />
-                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2" onClick={() => document.querySelector('input[type="file"]').click()} disabled={uploading}>
-                                Choose Image
-                            </button>
-                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleUpload} disabled={!image || uploading}>
-                                Upload Image
-                            </button>
-                            {uploading && <span className="text-sm text-gray-600">Uploading...</span>}
-                        </div>
-                        {previewURL && (
-                            <>
-                                <h3 className="text-lg font-semibold text-gray-800 mb-2">Preview</h3>
-                                <img src={previewURL} alt="Preview" className="max-w-xs mx-auto" />
-                            </>
-                        )}
                         {userProfile && userProfile.profileImage && (
                             <>
-                                <h3 className="text-lg font-semibold text-gray-800 mb-2">Current Profile Image</h3>
                                 <img src={userProfile.profileImage} alt="Profile" className="max-w-xs mx-auto" />
+                                <div className="mt-4">
+                                    <CustomButton onClick={() => setIsOpenModal(true)} className="customButton">
+                                        Change profile picture
+                                    </CustomButton>
+                                </div>
                             </>
                         )}
+                        <ChangeProfilePictureModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} handleImageChange={handleImageChange} handleUpload={handleUpload} image={image} uploading={uploading} previewURL={previewURL} />
                     </div>
                     <div className="p-4 flex-grow">
                         <h2 className="text-xl font-semibold text-gray-800 mb-2">Account Information</h2>
-                        {userProfile && (
+                        {userProfile && user && (
                             <div>
                                 <p className="text-sm text-gray-600">
                                     <strong>Name:</strong> {user.displayName}
