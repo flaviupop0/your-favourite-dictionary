@@ -45,15 +45,6 @@ const ProfilePage = () => {
         return unsubscribe;
     }, [router]);
 
-    const handleLogout = async () => {
-        try {
-            await auth.signOut();
-            router.push("/");
-        } catch (error) {
-            console.error("Error signing out:", error);
-        }
-    };
-
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -62,7 +53,7 @@ const ProfilePage = () => {
         <div className="min-h-screen bg-white flex flex-col">
             <NavBar>
                 <>
-                    <MenuButton onClick={handleClick} />
+                    <MenuButton onClick={() => auth.signOut()} />
                     <SlidingMenu anchorEl={anchorEl} open={isOpen} onClose={handleClose} firstHref="/" firstText="Home" />
                 </>
                 <h1 className="text-white text-lg ml-4">This is your profile page, {user.displayName}</h1>
