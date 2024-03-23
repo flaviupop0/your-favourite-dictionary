@@ -45,6 +45,15 @@ const ProfilePage = () => {
         return unsubscribe;
     }, [router]);
 
+    const handleLogout = async () => {
+        try {
+            await auth.signOut();
+            router.push("/signin");
+        } catch (error) {
+            console.error("Error signing out:", error);
+        }
+    };
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -53,10 +62,10 @@ const ProfilePage = () => {
         <div className="min-h-screen bg-white flex flex-col">
             <NavBar>
                 <>
-                    <MenuButton onClick={() => auth.signOut()} />
+                    <MenuButton onClick={handleClick} />
                     <SlidingMenu anchorEl={anchorEl} open={isOpen} onClose={handleClose} firstHref="/" firstText="Home" />
                 </>
-                <h1 className="text-white text-lg ml-4">This is your profile page, {user.displayName}</h1>
+                <h1 className="text-white text-lg ml-4">This is your profile page, {user ? user.displayName : ""}</h1>
                 <ul className="flex space-x-4">
                     <CustomButton onClick={handleLogout} className="signOutButton">
                         Sign out
@@ -65,15 +74,21 @@ const ProfilePage = () => {
             </NavBar>
             <div className="content" style={{ border: "1px solid red", padding: "10px", color: "black" }}>
                 <h2 className="subtitle">Account Information</h2>
-                <p>
-                    <strong>Name:</strong> {user.displayName}
-                </p>
-                <p>
-                    <strong>Email:</strong> {user.email}
-                </p>
-                <p>
-                    <strong>Username:</strong> {userProfile.username}
-                </p>
+                {user && (
+                    <>
+                        <p>
+                            <strong>Name:</strong> {user.displayName}
+                        </p>
+                        <p>
+                            <strong>Email:</strong> {user.email}
+                        </p>
+                    </>
+                )}
+                {userProfile && (
+                    <p>
+                        <strong>Username:</strong> {userProfile.username}
+                    </p>
+                )}
             </div>
         </div>
     );
