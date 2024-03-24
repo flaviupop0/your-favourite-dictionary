@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth, db } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
-import { getAuth, updateProfile } from "firebase/auth";
+import { getAuth, updateProfile, sendEmailVerification } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import FormInput from "../components/FormInput/FormInput.jsx";
 import CustomButton from "../components/CustomButton/CustomButton.jsx";
@@ -23,11 +23,12 @@ const Register = () => {
     const handleRegister = async () => {
         try {
             const res = await createUserWithEmailAndPassword(email, password);
-            let userDocRef = doc(db, "users", res.user.uid);
             if (res && res.user) {
+                await sendEmailVerification(res.user);
                 await updateProfile(getAuth().currentUser, {
                     displayName: `${name}`,
                 });
+                let userDocRef = doc(db, "users", res.user.uid);
                 await setDoc(userDocRef, {
                     userId: res.user.uid,
                     email: email,
@@ -47,6 +48,7 @@ const Register = () => {
             setUsername("");
         } catch (e) {
             setErrorMessage("The Email you entered is invalid or this account already exists.");
+            console.error(e);
         }
     };
 

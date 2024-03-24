@@ -14,11 +14,11 @@ import "./styles.css";
 const ProfilePage = () => {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
-    const [isOpenMenu, setIsOpenMenu] = useState(false);
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isOpenEditModal, setIsOpenEditModal] = useState(false);
     const [userProfile, setUserProfile] = useState(null);
     const [user, setUser] = useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -58,6 +58,13 @@ const ProfilePage = () => {
         setIsOpenEditModal(true);
     };
 
+    const handleUpdateProfile = (updatedProfile) => {
+        setUserProfile((prevProfile) => ({
+            ...prevProfile,
+            ...updatedProfile,
+        }));
+    };
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -65,10 +72,10 @@ const ProfilePage = () => {
         <div className="min-h-screen bg-gray-100 flex flex-col">
             <NavBar>
                 <>
-                    <MenuButton onClick={() => setIsOpenMenu(!isOpenMenu)} />
-                    <SlidingMenu anchorEl={isOpenMenu} open={isOpenMenu} onClose={() => setIsOpenMenu(false)} firstHref="/" firstText="Home" />
+                    <MenuButton onClick={(event) => setAnchorEl(event.currentTarget)} />
+                    <SlidingMenu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)} firstHref="/" firstText="Home" />
                 </>
-                <h1 className="text-white text-lg ml-4">This is your profile page, {user ? user.displayName : ""}</h1>
+                <h1 className="text-white text-lg ml-4">This is your profile page, {user ? userProfile.firstName : ""}</h1>
                 <ul className="flex space-x-4">
                     <CustomButton onClick={handleLogout} className="signOutButton">
                         Sign out
@@ -82,21 +89,15 @@ const ProfilePage = () => {
                         {userProfile && userProfile.profileImage && (
                             <>
                                 <img src={userProfile.profileImage} alt="Profile" className="max-w-xs mx-auto" />
-                                <div className="mt-4">
-                                    <CustomButton onClick={() => setIsOpenModal(true)} className="customButton">
-                                        Change profile picture
-                                    </CustomButton>
-                                </div>
                             </>
                         )}
-                        <ChangeProfilePictureModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} user={user} userProfile={userProfile} setUserProfile={setUserProfile} />
                     </div>
                     <div className="p-4 flex-grow">
                         <h2 className="text-xl font-semibold text-gray-800 mb-2">Account Information</h2>
                         {userProfile && user && (
                             <div>
                                 <p className="text-sm text-gray-600">
-                                    <strong>Name:</strong> {user.displayName}
+                                    <strong>Name:</strong> {userProfile.firstName}
                                 </p>
                                 <p className="text-sm text-gray-600">
                                     <strong>Last Name:</strong> {userProfile.lastName}
@@ -107,6 +108,9 @@ const ProfilePage = () => {
                                 <p className="text-sm text-gray-600">
                                     <strong>Email:</strong> {user.email}
                                 </p>
+                                <CustomButton onClick={() => setIsOpenModal(true)} className="customButton mr-1">
+                                    Change profile picture
+                                </CustomButton>
                                 <CustomButton onClick={handleEditProfile} className="customButton">
                                     Edit Personal Information
                                 </CustomButton>
@@ -115,7 +119,8 @@ const ProfilePage = () => {
                     </div>
                 </div>
             </div>
-            <EditPersonalInfoModal isOpen={isOpenEditModal} onClose={() => setIsOpenEditModal(false)} user={user} userProfile={userProfile} />
+            <ChangeProfilePictureModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} user={user} userProfile={userProfile} setUserProfile={setUserProfile} />
+            <EditPersonalInfoModal isOpen={isOpenEditModal} onClose={() => setIsOpenEditModal(false)} user={user} userProfile={userProfile} onUpdateProfile={handleUpdateProfile} />
         </div>
     );
 };

@@ -6,7 +6,7 @@ import { auth, db } from "../../firebase/config";
 import { signInWithEmailAndPassword, updateProfile, updateEmail } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 
-const EditPersonalInfoModal = ({ isOpen, onClose, user, userProfile }) => {
+const EditPersonalInfoModal = ({ isOpen, onClose, user, userProfile, onUpdateProfile }) => {
     const [newUsername, setNewUsername] = useState("");
     const [newEmail, setNewEmail] = useState("");
     const [actualPassword, setActualPassword] = useState("");
@@ -26,19 +26,26 @@ const EditPersonalInfoModal = ({ isOpen, onClose, user, userProfile }) => {
     const handleSaveChanges = async () => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, user.email, actualPassword);
-
             if (userCredential) {
                 const currentUser = userCredential.user;
+                const userDocRef = doc(db, "users", currentUser.uid);
+                if (newEmail !== user.email) {
+                    updateEmail(user, newEmail);
+                }
                 await updateProfile(currentUser, {
                     displayName: newName,
                 });
-                await updateEmail(currentUser, newEmail);
-                const userDocRef = doc(db, "users", currentUser.uid);
                 await updateDoc(userDocRef, {
                     lastName: newLastName,
                     username: newUsername,
+                    firstName: newName,
+                    email: newEmail,
+                    displayName: newName,
                 });
+                onUpdateProfile({ username: newUsername, lastName: newLastName, email: newEmail, firstName: newName });
                 onClose();
+                setActualPassword("");
+                setError("");
             } else {
                 setError("An error occurred while updating user information");
             }
@@ -47,7 +54,6 @@ const EditPersonalInfoModal = ({ isOpen, onClose, user, userProfile }) => {
                 setError("Incorrect password. Please try again.");
             } else {
                 setError("An error occurred while updating user information");
-                console.error(error);
             }
         }
     };
