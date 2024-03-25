@@ -8,7 +8,6 @@ import { doc, updateDoc } from "firebase/firestore";
 
 const EditPersonalInfoModal = ({ isOpen, onClose, user, userProfile, onUpdateProfile }) => {
     const [newUsername, setNewUsername] = useState("");
-    const [newEmail, setNewEmail] = useState("");
     const [actualPassword, setActualPassword] = useState("");
     const [newName, setNewName] = useState("");
     const [newLastName, setNewLastName] = useState("");
@@ -17,7 +16,6 @@ const EditPersonalInfoModal = ({ isOpen, onClose, user, userProfile, onUpdatePro
     useEffect(() => {
         if (userProfile && user) {
             setNewUsername(userProfile.username || "");
-            setNewEmail(user.email || "");
             setNewName(user.displayName || "");
             setNewLastName(userProfile.lastName || "");
         }
@@ -29,9 +27,6 @@ const EditPersonalInfoModal = ({ isOpen, onClose, user, userProfile, onUpdatePro
             if (userCredential) {
                 const currentUser = userCredential.user;
                 const userDocRef = doc(db, "users", currentUser.uid);
-                if (newEmail !== user.email) {
-                    updateEmail(user, newEmail);
-                }
                 await updateProfile(currentUser, {
                     displayName: newName,
                 });
@@ -39,10 +34,9 @@ const EditPersonalInfoModal = ({ isOpen, onClose, user, userProfile, onUpdatePro
                     lastName: newLastName,
                     username: newUsername,
                     firstName: newName,
-                    email: newEmail,
                     displayName: newName,
                 });
-                onUpdateProfile({ username: newUsername, lastName: newLastName, email: newEmail, firstName: newName });
+                onUpdateProfile({ username: newUsername, lastName: newLastName, firstName: newName });
                 onClose();
                 setActualPassword("");
                 setError("");
@@ -69,8 +63,6 @@ const EditPersonalInfoModal = ({ isOpen, onClose, user, userProfile, onUpdatePro
                 <input className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500" type="text" value={newName} onChange={(e) => setNewName(e.target.value)} />
                 <p>Change your last name:</p>
                 <input className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500" type="text" value={newLastName} onChange={(e) => setNewLastName(e.target.value)} />
-                <p>New Email:</p>
-                <input className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500" type="email" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} />
                 <p>Confirm changes with password</p>
                 <input className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500" type="password" value={actualPassword} onChange={(e) => setActualPassword(e.target.value)} />
             </div>

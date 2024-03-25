@@ -9,6 +9,7 @@ import CustomButton from "../components/CustomButton/CustomButton.jsx";
 import NavBar from "../components/NavBar/navbar.jsx";
 import ChangeProfilePictureModal from "../components/ChangeProfilePictureModal/ChangeProfilePictureModal.jsx";
 import EditPersonalInfoModal from "../components/EditPersonalInfoModal/EditPersonalInfoModal.jsx";
+import ChangeEmailModal from "../components/ChangeEmailAdress/ChangeEmailModal";
 import "./styles.css";
 
 const ProfilePage = () => {
@@ -16,6 +17,7 @@ const ProfilePage = () => {
     const [loading, setLoading] = useState(true);
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+    const [isOpenEmailModal, setIsOpenEmailModal] = useState(false);
     const [userProfile, setUserProfile] = useState(null);
     const [user, setUser] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -56,6 +58,10 @@ const ProfilePage = () => {
 
     const handleEditProfile = () => {
         setIsOpenEditModal(true);
+    };
+
+    const handleEditEmail = () => {
+        setIsOpenEmailModal(true);
     };
 
     const handleUpdateProfile = (updatedProfile) => {
@@ -108,24 +114,32 @@ const ProfilePage = () => {
                                 <p className="text-lg text-gray-600">
                                     <strong>Email:</strong> {user.email}
                                 </p>
+                                <CustomButton onClick={handleEditProfile} className="customButton customButtonSmall mb-3 mr-3">
+                                    Edit Personal Informations
+                                </CustomButton>
                                 <CustomButton onClick={() => setIsOpenModal(true)} className="customButton mb-3 customButtonSmall mt-2">
                                     Change profile picture
                                 </CustomButton>
-                                <CustomButton onClick={() => setIsOpenModal(true)} className="customButton customButtonSmall mb-3 ml-3">
-                                    Change Password
-                                </CustomButton>
                             </div>
                         )}
-                        <CustomButton onClick={handleEditProfile} className="customButton customButtonSmall">
-                            Edit Personal Informations
-                        </CustomButton>
-                        <CustomButton onClick={() => setIsOpenModal(true)} className="customButton customButtonSmall mb-3 ml-3">
+                        <CustomButton onClick={handleEditEmail} className="customButton customButtonSmall mr-3">
                             Change E-mail
+                        </CustomButton>
+                        <CustomButton onClick={() => setIsOpenModal(true)} className="customButton customButtonSmall ">
+                            Change Password
                         </CustomButton>
                     </div>
                 </div>
             </div>
             <ChangeProfilePictureModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} user={user} userProfile={userProfile} setUserProfile={setUserProfile} />
+            <ChangeEmailModal
+                isOpen={isOpenEmailModal}
+                onClose={() => setIsOpenEmailModal(false)}
+                user={user}
+                onSuccess={(newEmail) => {
+                    console.log("Email changed successfully to:", newEmail);
+                }}
+            />
             <EditPersonalInfoModal isOpen={isOpenEditModal} onClose={() => setIsOpenEditModal(false)} user={user} userProfile={userProfile} onUpdateProfile={handleUpdateProfile} />
         </div>
     );

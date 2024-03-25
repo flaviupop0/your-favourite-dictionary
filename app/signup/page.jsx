@@ -4,7 +4,7 @@ import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth, db } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
 import { getAuth, updateProfile, sendEmailVerification } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, collection, query, where, getDocs } from "firebase/firestore";
 import FormInput from "../components/FormInput/FormInput.jsx";
 import CustomButton from "../components/CustomButton/CustomButton.jsx";
 import "./page.css";
@@ -22,6 +22,11 @@ const Register = () => {
 
     const handleRegister = async () => {
         try {
+            const usernameExists = await checkUsernameExists(username);
+            if (usernameExists) {
+                setErrorMessage("This username is already taken. Please choose a different one.");
+                return;
+            }
             const res = await createUserWithEmailAndPassword(email, password);
             if (res && res.user) {
                 await sendEmailVerification(res.user);
@@ -52,6 +57,16 @@ const Register = () => {
         }
     };
 
+    const checkUsernameExists = async (username) => {
+        try {
+            const q = query(collection(db, "users"), where("username", "==", username));
+            const querySnapshot = await getDocs(q);
+            return !querySnapshot.empty;
+        } catch (error) {
+            console.error("Error checking username:", error);
+            return true;
+        }
+    };
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
