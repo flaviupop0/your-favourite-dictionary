@@ -96,26 +96,26 @@ const ProfilePage = () => {
                         <h2 className="text-xl font-semibold text-gray-800 mb-2">Account Information</h2>
                         {userProfile && user && (
                             <div>
-                                <p className="text-sm text-gray-600">
+                                <p className="text-lg text-gray-600">
                                     <strong>Name:</strong> {userProfile.firstName}
                                 </p>
-                                <p className="text-sm text-gray-600">
+                                <p className="text-lg text-gray-600">
                                     <strong>Last Name:</strong> {userProfile.lastName}
                                 </p>
-                                <p className="text-sm text-gray-600">
+                                <p className="text-lg text-gray-600">
                                     <strong>Username:</strong> {userProfile.username}
                                 </p>
-                                <p className="text-sm text-gray-600">
+                                <p className="text-lg text-gray-600">
                                     <strong>Email:</strong> {user.email}
                                 </p>
-                                <CustomButton onClick={() => setIsOpenModal(true)} className="customButton mr-1">
+                                <CustomButton onClick={() => setIsOpenModal(true)} className="customButton mb-3 customButtonSmall">
                                     Change profile picture
-                                </CustomButton>
-                                <CustomButton onClick={handleEditProfile} className="customButton">
-                                    Edit Personal Information
                                 </CustomButton>
                             </div>
                         )}
+                        <CustomButton onClick={handleEditProfile} className="customButton customButtonSmall">
+                            Edit Personal Informations
+                        </CustomButton>
                     </div>
                 </div>
             </div>

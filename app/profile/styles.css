@@ -42,3 +42,8 @@ s .content {
 .signOutButton:hover {
     background-color: rgb(185 28 28);
 }
+
+.customButtonSmall {
+    width: 15rem;
+    height: 45px;
+}
