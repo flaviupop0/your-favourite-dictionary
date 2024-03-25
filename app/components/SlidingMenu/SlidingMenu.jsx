@@ -37,9 +37,6 @@ const SlidingMenu = ({ anchorEl, onClose, open, firstHref, firstText }) => {
             <MenuItem onClick={onClose} component="a" href="/create-dictionary">
                 Create dictionary
             </MenuItem>
-            <MenuItem onClick={onClose} component="a" href="/dictionaries">
-                Your dictionaries
-            </MenuItem>
         </Menu>
     );
 };

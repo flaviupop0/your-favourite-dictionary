@@ -73,7 +73,7 @@ const ProfilePage = () => {
             <NavBar>
                 <>
                     <MenuButton onClick={(event) => setAnchorEl(event.currentTarget)} />
-                    <SlidingMenu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)} firstHref="/" firstText="Home" />
+                    <SlidingMenu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)} firstHref="/" firstText="Your dictionaries" />
                 </>
                 <h1 className="text-white text-lg ml-4">This is your profile page, {user ? userProfile.firstName : ""}</h1>
                 <ul className="flex space-x-4">
@@ -108,13 +108,19 @@ const ProfilePage = () => {
                                 <p className="text-lg text-gray-600">
                                     <strong>Email:</strong> {user.email}
                                 </p>
-                                <CustomButton onClick={() => setIsOpenModal(true)} className="customButton mb-3 customButtonSmall">
+                                <CustomButton onClick={() => setIsOpenModal(true)} className="customButton mb-3 customButtonSmall mt-2">
                                     Change profile picture
+                                </CustomButton>
+                                <CustomButton onClick={() => setIsOpenModal(true)} className="customButton customButtonSmall mb-3 ml-3">
+                                    Change Password
                                 </CustomButton>
                             </div>
                         )}
                         <CustomButton onClick={handleEditProfile} className="customButton customButtonSmall">
                             Edit Personal Informations
+                        </CustomButton>
+                        <CustomButton onClick={() => setIsOpenModal(true)} className="customButton customButtonSmall mb-3 ml-3">
+                            Change E-mail
                         </CustomButton>
                     </div>
                 </div>
