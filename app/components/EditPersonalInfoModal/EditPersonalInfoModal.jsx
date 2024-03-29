@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Modal from "../Modal/Modal.jsx";
 import CustomButton from "../CustomButton/CustomButton.jsx";
 import { auth, db } from "../../firebase/config";
-import { signInWithEmailAndPassword, updateProfile, updateEmail } from "firebase/auth";
+import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 
 const EditPersonalInfoModal = ({ isOpen, onClose, user, userProfile, onUpdateProfile }) => {

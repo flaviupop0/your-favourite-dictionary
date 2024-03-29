@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { auth, db } from "@/app/firebase/config";
+import { auth, db, storage, ref, getDownloadURL } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
 import { getAuth, updateProfile, sendEmailVerification } from "firebase/auth";
 import { doc, setDoc, collection, query, where, getDocs } from "firebase/firestore";
@@ -29,9 +29,12 @@ const Register = () => {
             }
             const res = await createUserWithEmailAndPassword(email, password);
             if (res && res.user) {
+                const storageRef = ref(storage, "profileImages/default/5907.jpg");
+                const defaultProfilePicURL = await getDownloadURL(storageRef);
                 await sendEmailVerification(res.user);
                 await updateProfile(getAuth().currentUser, {
                     displayName: `${name}`,
+                    photoURL: defaultProfilePicURL,
                 });
                 let userDocRef = doc(db, "users", res.user.uid);
                 await setDoc(userDocRef, {
@@ -40,7 +43,7 @@ const Register = () => {
                     username: username,
                     firstName: name,
                     lastName: surName,
-                    profileImage: null,
+                    profileImage: defaultProfilePicURL,
                 });
                 router.push("/signin");
             } else {
@@ -76,7 +79,7 @@ const Register = () => {
             <div className="bg-gray-800 p-10 rounded-lg shadow-xl w-96">
                 <h1 className="text-white text-2xl mb-5">Sign Up</h1>
                 <FormInput type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                <FormInput type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
+                <FormInput type="text" placeholder="First Name" value={name} onChange={(e) => setName(e.target.value)} />
                 <FormInput type="text" placeholder="Last Name" value={surName} onChange={(e) => setSurName(e.target.value)} />
                 <FormInput type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 <div className="input-container">
