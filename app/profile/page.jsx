@@ -10,6 +10,7 @@ import NavBar from "../components/NavBar/navbar.jsx";
 import ChangeProfilePictureModal from "../components/ChangeProfilePictureModal/ChangeProfilePictureModal.jsx";
 import EditPersonalInfoModal from "../components/EditPersonalInfoModal/EditPersonalInfoModal.jsx";
 import ChangeEmailModal from "../components/ChangeEmailAdress/ChangeEmailModal";
+import ChangePasswordModal from "../components/ChangePassword/ChangePassword";
 import "./styles.css";
 
 const ProfilePage = () => {
@@ -18,6 +19,7 @@ const ProfilePage = () => {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isOpenEditModal, setIsOpenEditModal] = useState(false);
     const [isOpenEmailModal, setIsOpenEmailModal] = useState(false);
+    const [isOpenPasswordModal, setIsOpenPasswordModal] = useState(false);
     const [userProfile, setUserProfile] = useState(null);
     const [user, setUser] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -62,6 +64,10 @@ const ProfilePage = () => {
 
     const handleEditEmail = () => {
         setIsOpenEmailModal(true);
+    };
+
+    const handleEditPassword = () => {
+        setIsOpenPasswordModal(true);
     };
 
     const handleUpdateProfile = (updatedProfile) => {
@@ -125,12 +131,13 @@ const ProfilePage = () => {
                         <CustomButton onClick={handleEditEmail} className="customButton customButtonSmall mr-3">
                             Change E-mail
                         </CustomButton>
-                        <CustomButton onClick={() => setIsOpenModal(true)} className="customButton customButtonSmall ">
+                        <CustomButton onClick={handleEditPassword} className="customButton customButtonSmall ">
                             Change Password
                         </CustomButton>
                     </div>
                 </div>
             </div>
+            <ChangePasswordModal isOpen={isOpenPasswordModal} onClose={() => setIsOpenPasswordModal(false)} user={user} />
             <ChangeProfilePictureModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} user={user} userProfile={userProfile} setUserProfile={setUserProfile} />
             <ChangeEmailModal
                 isOpen={isOpenEmailModal}

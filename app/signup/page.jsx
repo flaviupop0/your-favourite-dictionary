@@ -56,7 +56,6 @@ const Register = () => {
             setUsername("");
         } catch (e) {
             setErrorMessage("The Email you entered is invalid or this account already exists.");
-            console.error(e);
         }
     };
 
@@ -66,7 +65,6 @@ const Register = () => {
             const querySnapshot = await getDocs(q);
             return !querySnapshot.empty;
         } catch (error) {
-            console.error("Error checking username:", error);
             return true;
         }
     };
