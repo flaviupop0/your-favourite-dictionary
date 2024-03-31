@@ -5,6 +5,7 @@ import CustomButton from "../CustomButton/CustomButton.jsx";
 import { auth, db } from "../../firebase/config";
 import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
+import FormInput from "../FormInput/FormInput.jsx";
 
 const EditPersonalInfoModal = ({ isOpen, onClose, user, userProfile, onUpdateProfile }) => {
     const [newUsername, setNewUsername] = useState("");
@@ -58,13 +59,13 @@ const EditPersonalInfoModal = ({ isOpen, onClose, user, userProfile, onUpdatePro
             {error && <p className="text-red-500">{error}</p>}
             <div className="text-black">
                 <p>New Username:</p>
-                <input className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500" type="text" value={newUsername} onChange={(e) => setNewUsername(e.target.value)} />
+                <FormInput type="text" value={newUsername} onChange={(e) => setNewUsername(e.target.value)} />
                 <p>Change your name:</p>
-                <input className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500" type="text" value={newName} onChange={(e) => setNewName(e.target.value)} />
+                <FormInput type="text" value={newName} onChange={(e) => setNewName(e.target.value)} />
                 <p>Change your last name:</p>
-                <input className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500" type="text" value={newLastName} onChange={(e) => setNewLastName(e.target.value)} />
+                <FormInput type="text" value={newLastName} onChange={(e) => setNewLastName(e.target.value)} />
                 <p>Confirm changes with password</p>
-                <input className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500" type="password" value={actualPassword} onChange={(e) => setActualPassword(e.target.value)} />
+                <FormInput type="password" value={actualPassword} onChange={(e) => setActualPassword(e.target.value)} />
             </div>
             <div>
                 <CustomButton onClick={handleSaveChanges} disabled={!actualPassword} className="customButton">
