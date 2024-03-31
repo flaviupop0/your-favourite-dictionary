@@ -1,22 +1,26 @@
 import React, { useState } from "react";
 import Modal from "../Modal/Modal.jsx";
 import CustomButton from "../CustomButton/CustomButton.jsx";
-import { updateEmail } from "firebase/auth";
+import { updateEmail, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
+import FormInput from "../FormInput/FormInput.jsx";
 
-const ChangeEmailModal = ({ isOpen, onClose, user, onSuccess }) => {
+const ChangeEmailModal = ({ isOpen, onClose, user }) => {
     const [newEmail, setNewEmail] = useState("");
     const [actualPassword, setActualPassword] = useState("");
     const [error, setError] = useState(null);
 
     const handleChangeEmail = async () => {
         try {
+            const credentials = EmailAuthProvider.credential(user.email, actualPassword);
+            await reauthenticateWithCredential(user, credentials);
             await updateEmail(user, newEmail);
-            onSuccess(newEmail);
             onClose();
             setActualPassword("");
             setError(null);
+            setNewEmail("");
         } catch (error) {
             setError("An user already has this e-mail adress");
+            console.error(error);
         }
     };
 
@@ -26,9 +30,9 @@ const ChangeEmailModal = ({ isOpen, onClose, user, onSuccess }) => {
             {error && <p className="text-red-500">{error}</p>}
             <div className="text-black">
                 <p>New Email:</p>
-                <input className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500" type="email" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} />
+                <FormInput type="email" placeholder="example@example.com" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} />
                 <p>Confirm changes with password</p>
-                <input className="w-full p-3 mb-4 bg-gray-700 rounded outline-none text-white placeholder-gray-500" type="password" value={actualPassword} onChange={(e) => setActualPassword(e.target.value)} />
+                <FormInput type="password" value={actualPassword} onChange={(e) => setActualPassword(e.target.value)} />
             </div>
             <div>
                 <CustomButton onClick={handleChangeEmail} disabled={!actualPassword} className="customButton">

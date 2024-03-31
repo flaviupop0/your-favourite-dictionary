@@ -139,14 +139,7 @@ const ProfilePage = () => {
             </div>
             <ChangePasswordModal isOpen={isOpenPasswordModal} onClose={() => setIsOpenPasswordModal(false)} user={user} />
             <ChangeProfilePictureModal isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} user={user} userProfile={userProfile} setUserProfile={setUserProfile} />
-            <ChangeEmailModal
-                isOpen={isOpenEmailModal}
-                onClose={() => setIsOpenEmailModal(false)}
-                user={user}
-                onSuccess={(newEmail) => {
-                    console.log("Email changed successfully to:", newEmail);
-                }}
-            />
+            <ChangeEmailModal isOpen={isOpenEmailModal} onClose={() => setIsOpenEmailModal(false)} user={user} />
             <EditPersonalInfoModal isOpen={isOpenEditModal} onClose={() => setIsOpenEditModal(false)} user={user} userProfile={userProfile} onUpdateProfile={handleUpdateProfile} />
         </div>
     );
