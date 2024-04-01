@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { db } from "../../app/firebase/config";
+import { collection, doc, getDoc } from "firebase/firestore"; // Import necessary methods from firebase/firestore
 
 function DictionaryPage() {
     const router = useRouter();
@@ -10,10 +11,10 @@ function DictionaryPage() {
     useEffect(() => {
         const fetchDictionary = async () => {
             try {
-                console.log("proba");
-                const docRef = await db.collection("dictionaries").doc(id).get();
-                if (docRef.exists) {
-                    setDictionary(docRef.data());
+                const docRef = doc(db, "dictionaries", id);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    setDictionary(docSnap.data());
                 } else {
                     console.log("No such dictionary found!");
                 }
@@ -33,7 +34,7 @@ function DictionaryPage() {
     return (
         <div>
             <h1>{dictionary.name}</h1>
-            {/* Render the dictionary data here */}
+            <p>{dictionary.description}</p>
         </div>
     );
 }
