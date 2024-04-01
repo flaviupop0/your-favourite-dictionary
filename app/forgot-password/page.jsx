@@ -16,7 +16,6 @@ export default function ForgotPassword() {
             setEmailSent(true);
         } catch (error) {
             setEmailSent(false);
-            //still in work
         }
     };
 
