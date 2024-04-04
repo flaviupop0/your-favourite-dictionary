@@ -80,6 +80,7 @@ const ProfilePage = () => {
     if (loading) {
         return <div>Loading...</div>;
     }
+
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col">
             <NavBar>
@@ -87,7 +88,7 @@ const ProfilePage = () => {
                     <MenuButton onClick={(event) => setAnchorEl(event.currentTarget)} />
                     <SlidingMenu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)} firstHref="/" firstText="Your dictionaries" />
                 </>
-                <h1 className="text-center text-white text-2xl font-bold">This is your profile page, {user ? userProfile.firstName : ""}</h1>
+                <h1 className="text-center text-white text-2xl font-bold">Your profile page</h1>
                 <ul className="flex space-x-4">
                     <CustomButton onClick={handleLogout} className="signOutButton">
                         Sign out
@@ -98,11 +99,7 @@ const ProfilePage = () => {
                 <div className="bg-white rounded-lg shadow-md overflow-hidden flex">
                     <div className="p-4 flex-shrink-0">
                         <h2 className="text-xl font-semibold text-gray-800 mb-2">Profile Image</h2>
-                        {userProfile && userProfile.profileImage && (
-                            <>
-                                <img src={userProfile.profileImage} alt="Profile" className="max-w-xs mx-auto" />
-                            </>
-                        )}
+                        {userProfile && userProfile.profileImage && <img src={userProfile.profileImage} alt="Profile" className="max-w-xs mx-auto" />}
                     </div>
                     <div className="p-4 flex-grow">
                         <h2 className="text-xl font-semibold text-gray-800 mb-2">Account Information</h2>
@@ -121,19 +118,21 @@ const ProfilePage = () => {
                                     <strong>Email:</strong> {user.email}
                                 </p>
                                 <CustomButton onClick={handleEditProfile} className="customButton customButtonSmall mb-3 mr-3">
-                                    Edit Personal Informations
+                                    Edit Personal Info
                                 </CustomButton>
                                 <CustomButton onClick={() => setIsOpenModal(true)} className="customButton mb-3 customButtonSmall mt-2">
-                                    Change profile picture
+                                    Change Profile Picture
                                 </CustomButton>
                             </div>
                         )}
-                        <CustomButton onClick={handleEditEmail} className="customButton customButtonSmall mr-3">
-                            Change E-mail
-                        </CustomButton>
-                        <CustomButton onClick={handleEditPassword} className="customButton customButtonSmall ">
-                            Change Password
-                        </CustomButton>
+                        <div className="flex">
+                            <CustomButton onClick={handleEditEmail} className="customButton customButtonSmall mr-3">
+                                Change Email
+                            </CustomButton>
+                            <CustomButton onClick={handleEditPassword} className="customButton customButtonSmall">
+                                Change Password
+                            </CustomButton>
+                        </div>
                     </div>
                 </div>
             </div>
