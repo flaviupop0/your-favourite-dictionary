@@ -64,7 +64,7 @@ const Home = () => {
                         <SlidingMenu anchorEl={anchorEl} open={isOpen} onClose={handleClose} firstHref="./profile" firstText="Profile" />
                     </>
                 )}
-                <h1 className="text-white text-lg ml-4">{user ? `Welcome ${user.displayName}` : "Your Awesome Dictionary"}</h1>
+                <h1 className="text-center text-white text-2xl font-bold">{user ? `Welcome ${user.displayName}!` : "Your Awesome Dictionary"}</h1>
                 <ul className="flex space-x-4">
                     {user ? (
                         <CustomButton onClick={() => auth.signOut()} className="signOutButton">

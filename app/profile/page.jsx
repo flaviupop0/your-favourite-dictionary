@@ -87,7 +87,7 @@ const ProfilePage = () => {
                     <MenuButton onClick={(event) => setAnchorEl(event.currentTarget)} />
                     <SlidingMenu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)} firstHref="/" firstText="Your dictionaries" />
                 </>
-                <h1 className="text-white text-lg ml-4">This is your profile page, {user ? userProfile.firstName : ""}</h1>
+                <h1 className="text-center text-white text-2xl font-bold">This is your profile page, {user ? userProfile.firstName : ""}</h1>
                 <ul className="flex space-x-4">
                     <CustomButton onClick={handleLogout} className="signOutButton">
                         Sign out

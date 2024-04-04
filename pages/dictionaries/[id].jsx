@@ -121,7 +121,7 @@ function DictionaryPage() {
                     <MenuButton onClick={handleClick} className="customIcons text-white" />
                     <SlidingMenu anchorEl={anchorEl} open={isOpen} onClose={handleClose} firstHref="../" firstText="Home" secondHref="../profile" secondText="Profile" />
                 </>
-                <h1 className="text-center text-white text-4xl font-bold">{dictionary.name}</h1>
+                <h1 className="text-center text-white text-2xl font-bold">{dictionary.name}</h1>
                 <ul className="flex space-x-4">
                     {" "}
                     <CustomButton onClick={() => auth.signOut()} className="signOutButton">
