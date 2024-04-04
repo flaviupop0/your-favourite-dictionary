@@ -63,12 +63,17 @@ const Home = () => {
                         <SlidingMenu anchorEl={anchorEl} open={isOpen} onClose={handleClose} firstHref="./profile" firstText="Profile" />
                     </>
                 )}
-                <h1 className="text-center text-white text-2xl font-bold">{user ? `Welcome ${user.displayName}!` : "Your Awesome Dictionary"}</h1>
+                <div className="flex flex-grow items-center justify-center">
+                    {!user && <h1 className="ml-20 text-center text-white text-2xl font-bold">Your awesome Dictionary!</h1>}
+                    {user && <h1 className="text-center text-white text-2xl font-bold">Welcome {user.displayName}!</h1>}
+                </div>
                 <ul className="flex space-x-4">
                     {user ? (
-                        <CustomButton onClick={() => auth.signOut()} className="signOutButton">
-                            Sign out
-                        </CustomButton>
+                        <>
+                            <CustomButton onClick={() => auth.signOut()} className="signOutButton">
+                                Sign out
+                            </CustomButton>
+                        </>
                     ) : (
                         <>
                             <CustomButton onClick={() => router.push("./signup")} className="customButton">
