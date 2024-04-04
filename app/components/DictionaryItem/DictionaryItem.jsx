@@ -62,7 +62,7 @@ function DictionaryItem({ dictionary }) {
                 <FaEllipsisV className="text-gray-400 hover:text-gray-600 cursor-pointer" onClick={toggleColorPicker} />
             </div>
             {showColorPicker && (
-                <div ref={colorPickerRef} className="absolute top-full right-0">
+                <div ref={colorPickerRef} className="absolute top-full right-0 z-20">
                     <HexAlphaColorPicker color={color} onChange={handleChangeColor} />
                 </div>
             )}
