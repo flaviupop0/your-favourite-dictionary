@@ -18,6 +18,7 @@ const CreateDictionaryForm = ({ userId, onClose }) => {
                 description: dictionaryDescription,
                 ownerId: userId,
                 createdAt: new Date(),
+                color: "#e4de00",
             };
             await addDoc(dictionariesCollection, dictionaryData);
             setDictionaryName("");

@@ -64,3 +64,7 @@ body {
 .signOutButton:hover {
     background-color: rgb(185 28 28);
 }
+
+.highlight {
+    background-color: yellow;
+}

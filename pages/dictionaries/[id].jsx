@@ -18,10 +18,12 @@ function DictionaryPage() {
     const { id } = router.query;
     const [anchorEl, setAnchorEl] = useState(null);
     const [dictionary, setDictionary] = useState(null);
-    const [searchedIndex, setSearchedIndex] = useState(-1);
+    const [searchedIndex] = useState(-1);
+    const [date, setDate] = useState("");
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [editWordIndex, setEditWordIndex] = useState(null);
     const [editedWord, setEditedWord] = useState({ name: "", definition: "" });
+    const [ownerData, setOwnerData] = useState(null);
     const isOpen = Boolean(anchorEl);
     const contentRef = useRef(null);
 
@@ -33,6 +35,15 @@ function DictionaryPage() {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     setDictionary(data);
+                    const createdAtDate = data.createdAt.toDate();
+                    const formattedCreatedAt = createdAtDate.toLocaleString();
+                    setDate(formattedCreatedAt);
+                    const ownerDocRef = doc(db, "users", data.ownerId);
+                    const ownerDocSnap = await getDoc(ownerDocRef);
+                    if (ownerDocSnap.exists()) {
+                        const ownerData = ownerDocSnap.data();
+                        setOwnerData(ownerData);
+                    }
                 } else {
                     console.log("No such dictionary found!");
                 }
@@ -54,6 +65,9 @@ function DictionaryPage() {
             const updatedDocSnap = await getDoc(dictionaryRef);
             if (updatedDocSnap.exists()) {
                 setDictionary(updatedDocSnap.data());
+                setTimeout(() => {
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+                }, 100);
             }
         } catch (error) {
             console.error("Error adding word:", error);
@@ -66,12 +80,12 @@ function DictionaryPage() {
             const word = wordElement.textContent.toLowerCase();
             if (word === searchValue.toLowerCase()) {
                 wordElement.scrollIntoView({ behavior: "smooth", block: "center" });
-                wordElement.classList.add("bg-yellow-200", "transition", "duration-1000");
+                wordElement.innerHTML = wordElement.innerHTML.replace(new RegExp(searchValue, "gi"), `<span class="highlight">${searchValue}</span>`);
                 setTimeout(() => {
-                    wordElement.classList.remove("bg-yellow-200");
-                    setTimeout(() => {
-                        wordElement.classList.remove("transition", "duration-1000");
-                    }, 1000);
+                    const highlightedWords = document.querySelectorAll(".highlight");
+                    highlightedWords.forEach((highlightedWord) => {
+                        highlightedWord.replaceWith(highlightedWord.textContent);
+                    });
                 }, 2000);
             }
         });
@@ -133,45 +147,67 @@ function DictionaryPage() {
                 </>
                 <h1 className="text-center text-white text-2xl font-bold">{dictionary.name}</h1>
                 <ul className="flex space-x-4">
-                    {" "}
                     <CustomButton onClick={handleLogout} className="signOutButton">
                         Sign out
                     </CustomButton>{" "}
                 </ul>
             </Navbar>
-            <div className="container mx-auto p-5">
-                <p className="mb-4 text-xl">{dictionary.description}</p>
-                <h2 className="text-2xl font-semibold mb-4">Add Word</h2>
-                <AddWordForm onAddWord={handleAddWord} onSearchWord={handleSearchWord} />
-                {dictionary.words && (
-                    <div className="mt-6" ref={contentRef}>
-                        <h2 className="text-xl font-semibold mb-4">Words</h2>
-                        <div className="bg-white rounded-lg shadow-md">
-                            {dictionary.words.map((word, index) => (
-                                <div key={index} className={`border-b border-gray-200 p-4 ${index === searchedIndex ? "highlighted" : ""}`} style={{ display: "flex", justifyContent: "space-between" }}>
-                                    <div>
-                                        <p className="font-semibold word">{word.name}</p>
-                                        <p className="text-gray-600">{word.definition}</p>
-                                    </div>
-                                    <div>
-                                        <div className="flex">
-                                            <button className="ml-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded flex items-center" onClick={() => handleEditWord(index, word)}>
-                                                <FaRegEdit size={20} className="mr-2" />
-                                                Edit
-                                            </button>
-                                            <button className="ml-4 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-2 rounded flex items-center" onClick={() => handleDeleteWord(index)}>
-                                                <FaDeleteLeft size={20} className="mr-2" />
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
+            <div className="font-serif">
+                {ownerData && (
+                    <div className="flex items-center justify-center bg-gray-200 p-5 rounded-lg shadow-md">
+                        {ownerData.profileImage && <img src={ownerData.profileImage} alt="Owner's Profile" className="w-20 h-20 rounded-full object-cover shadow-lg" />}
+                        <div className="ml-4">
+                            <h1 className="text-xl font-semibold text-gray-800">User: {ownerData.username}</h1>
+                            <h1 className="text-xl font-semibold text-gray-800">Date of Creation: {date}</h1>
                         </div>
                     </div>
                 )}
+                <div className="container mx-auto p-5">
+                    <div className="mb-8">
+                        <h2 className="text-3xl font-semibold mb-6 text-gray-800">Description</h2>
+                        <div className="bg-white rounded-lg shadow-md p-5">
+                            <p className="text-lg leading-relaxed text-gray-800">{dictionary.description}</p>
+                        </div>
+                    </div>
+                    <div className="mb-8">
+                        <h2 className="text-3xl font-semibold mb-6 text-gray-800">Add Word</h2>
+                        <div className="bg-white rounded-lg shadow-md p-5">
+                            <AddWordForm onAddWord={handleAddWord} onSearchWord={handleSearchWord} />
+                        </div>
+                    </div>
+                    {dictionary.words && (
+                        <div>
+                            <h2 className="text-3xl font-semibold mb-6 text-gray-800">Words</h2>
+                            <div className="bg-white rounded-lg shadow-md p-5 relative">
+                                <div className="absolute inset-0 bg-gradient-to-b from-gray-200 to-white opacity-50 rounded-lg"></div>
+                                <div className="z-10 relative">
+                                    {dictionary.words.map((word, index) => (
+                                        <div key={index} className={`border-b border-gray-200 p-4 ${index === searchedIndex ? "highlighted" : ""}`}>
+                                            <div className="flex justify-between items-center">
+                                                <div>
+                                                    <p className="font-semibold text-xl word">{word.name}</p>
+                                                    <p className="text-lg text-gray-700">{word.definition}</p>
+                                                </div>
+                                                <div className="flex items-center space-x-4">
+                                                    <button className="ml-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded flex items-center" onClick={() => handleEditWord(index, word)}>
+                                                        <FaRegEdit size={20} className="mr-1" />
+                                                        Edit
+                                                    </button>
+                                                    <button className="ml-4 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-2 rounded flex items-center" onClick={() => handleDeleteWord(index)}>
+                                                        <FaDeleteLeft size={20} className="mr-1" />
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+                <EditWordModal isOpen={editModalVisible} onClose={() => setEditModalVisible(false)} dictionary={dictionary} editWordIndex={editWordIndex} editedWord={editedWord} setEditedWord={setEditedWord} id={id} updateDictionary={updateDictionary} />
             </div>
-            <EditWordModal isOpen={editModalVisible} onClose={() => setEditModalVisible(false)} dictionary={dictionary} editWordIndex={editWordIndex} editedWord={editedWord} setEditedWord={setEditedWord} id={id} updateDictionary={updateDictionary} />
         </div>
     );
 }

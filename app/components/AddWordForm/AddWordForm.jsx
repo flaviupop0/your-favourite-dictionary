@@ -23,10 +23,10 @@ const AddWordForm = ({ onAddWord, onSearchWord }) => {
     return (
         <form onSubmit={handleSubmit} className="mb-4">
             <div className="mb-4 flex">
-                <input type="text" className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500" placeholder="Enter Word" value={word} onChange={(e) => setWord(e.target.value)} />
+                <input type="text" className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500" placeholder="Write a word" value={word} onChange={(e) => setWord(e.target.value)} />
             </div>
             <div className="mb-4 flex">
-                <textarea placeholder="Enter the definition of the word" className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500" value={definition} onChange={(e) => setDefinition(e.target.value)} />
+                <textarea placeholder="Write the definition of the word" className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500" value={definition} onChange={(e) => setDefinition(e.target.value)} />
             </div>
             <div className="flex flex-row">
                 <button type="button" className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded flex items-center" onClick={handleSearch}>

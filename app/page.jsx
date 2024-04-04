@@ -87,7 +87,7 @@ const Home = () => {
             </NavBar>
             {user && (
                 <>
-                    <div className="flex-grow max-w-screen-lg mx-auto mt-4">
+                    <div className="flex-grow max-w-screen-lg mx-auto mt-4 font-serif">
                         {showModal && <CreateDictionaryModal userId={user.uid} onClose={handleCloseModal} />}
                         <div className="mt-4">
                             <h2 className="text-xl font-bold mb-2">Your Dictionaries</h2>
