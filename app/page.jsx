@@ -57,7 +57,7 @@ const Home = () => {
     return (
         <div className="min-h-screen bg-white flex flex-col">
             <NavBar user={user} router={router}>
-                {!user && <HiLibrary size="40px" className="customIcons" />}
+                {!user && <HiLibrary size="40px" className="text-white" />}
                 {user && (
                     <>
                         <MenuButton onClick={handleClick} />

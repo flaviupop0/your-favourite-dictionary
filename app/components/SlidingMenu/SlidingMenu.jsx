@@ -2,7 +2,7 @@ import React from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
-const SlidingMenu = ({ anchorEl, onClose, open, firstHref, firstText }) => {
+const SlidingMenu = ({ anchorEl, onClose, open, firstHref, firstText, secondHref, secondText }) => {
     return (
         <Menu
             anchorEl={anchorEl}
@@ -33,6 +33,9 @@ const SlidingMenu = ({ anchorEl, onClose, open, firstHref, firstText }) => {
         >
             <MenuItem onClick={onClose} component="a" href={firstHref}>
                 {firstText}
+            </MenuItem>
+            <MenuItem onClick={onClose} component="a" href={secondHref}>
+                {secondText}
             </MenuItem>
             <MenuItem onClick={onClose} component="a" href="/create-dictionary">
                 Create dictionary
