@@ -4,7 +4,6 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "@/app/firebase/config";
 import { getDocs } from "firebase/firestore";
 import { useRouter } from "next/navigation";
-import { HiLibrary } from "react-icons/hi";
 import CustomButton from "./components/CustomButton/CustomButton.jsx";
 import CreateDictionaryModal from "./components/CreateDictionaryModal/CreateDictionaryModal.jsx";
 import NavBar from "./components/NavBar/navbar.jsx";

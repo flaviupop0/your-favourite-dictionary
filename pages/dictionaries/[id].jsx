@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
-import { db } from "../../app/firebase/config";
+import { auth, db } from "../../app/firebase/config";
 import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
 import { FaRegEdit } from "react-icons/fa";
 import { FaDeleteLeft } from "react-icons/fa6";
@@ -106,6 +106,16 @@ function DictionaryPage() {
         }
     };
 
+    const handleLogout = async () => {
+        try {
+            await auth.signOut();
+            router.push("../");
+        } catch (error) {
+            console.error("Error signing out:", error);
+            setError("Failed to sign out");
+        }
+    };
+
     const updateDictionary = async (newDictionary) => {
         setDictionary(newDictionary);
     };
@@ -124,7 +134,7 @@ function DictionaryPage() {
                 <h1 className="text-center text-white text-2xl font-bold">{dictionary.name}</h1>
                 <ul className="flex space-x-4">
                     {" "}
-                    <CustomButton onClick={() => auth.signOut()} className="signOutButton">
+                    <CustomButton onClick={handleLogout} className="signOutButton">
                         Sign out
                     </CustomButton>{" "}
                 </ul>
