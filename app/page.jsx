@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "@/app/firebase/config";
-import { getDocs } from "firebase/firestore";
+import { getDocs, deleteDoc, doc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import CustomButton from "./components/CustomButton/CustomButton.jsx";
 import CreateDictionaryModal from "./components/CreateDictionaryModal/CreateDictionaryModal.jsx";
@@ -18,24 +18,9 @@ const Home = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [user] = useAuthState(auth);
     const [userDictionaries, setUserDictionaries] = useState([]);
+    const [isFetchingDictionaries, setIsFetchingDictionaries] = useState(false);
     const router = useRouter();
     const isOpen = Boolean(anchorEl);
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const handleCreateButtonClick = () => {
-        setShowModal(true);
-    };
-
-    const handleCloseModal = () => {
-        setShowModal(false);
-    };
 
     const fetchUserDictionaries = async () => {
         if (user) {
@@ -47,6 +32,31 @@ const Home = () => {
                 console.error("Error fetching user dictionaries:", error);
             }
         }
+    };
+
+    useEffect(() => {
+        fetchUserDictionaries();
+    }, [user]);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleDeleteDictionary = async (dictionaryId) => {
+        try {
+            await deleteDoc(doc(db, "dictionaries", dictionaryId));
+            setUserDictionaries((prevState) => prevState.filter((dictionary) => dictionary.id !== dictionaryId));
+        } catch (error) {
+            console.error("Error deleting dictionary:", error);
+        }
+    };
+
+    const handleDictionaryCreated = (newDictionary) => {
+        setUserDictionaries((prevState) => [...prevState, newDictionary]);
     };
 
     useEffect(() => {
@@ -88,13 +98,13 @@ const Home = () => {
             {user && (
                 <>
                     <div className="flex-grow max-w-screen-lg mx-auto mt-4 font-serif">
-                        {showModal && <CreateDictionaryModal userId={user.uid} onClose={handleCloseModal} />}
+                        {showModal && <CreateDictionaryModal userId={user.uid} onClose={() => setShowModal(false)} onDictionaryCreated={handleDictionaryCreated} />}
                         <div className="mt-4">
                             <h2 className="text-xl font-bold mb-2">Your Dictionaries</h2>
-                            <ul className="flex flex-wrap justify-center">{userDictionaries.length === 0 ? <p>No dictionaries found.</p> : userDictionaries.map((dictionary) => <DictionaryItem key={dictionary.id} dictionary={dictionary} />)}</ul>
+                            {isFetchingDictionaries ? <p>Loading...</p> : <ul className="flex flex-wrap justify-center">{userDictionaries.length === 0 ? <p>No dictionaries found.</p> : userDictionaries.map((dictionary) => <DictionaryItem key={dictionary.id} dictionary={dictionary} onDelete={handleDeleteDictionary} />)}</ul>}
                         </div>
                     </div>
-                    <CustomButton onClick={handleCreateButtonClick} className="customButton rounded-none">
+                    <CustomButton onClick={() => setShowModal(true)} className="customButton rounded-none">
                         Create Dictionary
                     </CustomButton>
                 </>

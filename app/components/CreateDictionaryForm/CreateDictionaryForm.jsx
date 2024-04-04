@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { db } from "../../firebase/config";
 import { addDoc, collection } from "firebase/firestore";
 
-const CreateDictionaryForm = ({ userId, onClose }) => {
+const CreateDictionaryForm = ({ userId, onClose, onDictionaryCreated }) => {
     const [dictionaryName, setDictionaryName] = useState("");
     const [dictionaryDescription, setDictionaryDescription] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -11,6 +11,19 @@ const CreateDictionaryForm = ({ userId, onClose }) => {
     const handleCreateDictionary = async (e) => {
         e.preventDefault();
         setIsLoading(true);
+
+        if (dictionaryName.length > 20) {
+            setError("Dictionary name must be 20 characters or less.");
+            setIsLoading(false);
+            return;
+        }
+
+        if (dictionaryDescription.length > 50) {
+            setError("Description must be 50 characters or less.");
+            setIsLoading(false);
+            return;
+        }
+
         try {
             const dictionariesCollection = collection(db, "dictionaries");
             const dictionaryData = {
@@ -20,11 +33,13 @@ const CreateDictionaryForm = ({ userId, onClose }) => {
                 createdAt: new Date(),
                 color: "#e4de00",
             };
-            await addDoc(dictionariesCollection, dictionaryData);
+            const docRef = await addDoc(dictionariesCollection, dictionaryData);
             setDictionaryName("");
             setDictionaryDescription("");
             setIsLoading(false);
             setError(null);
+            const newDictionary = { id: docRef.id, name: dictionaryName, description: dictionaryDescription, ownerId: userId, color: "#e4de00" };
+            onDictionaryCreated(newDictionary);
             onClose();
         } catch (error) {
             console.error(error);

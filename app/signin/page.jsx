@@ -45,13 +45,19 @@ const SignIn = () => {
         }
     };
 
+    const handleKeyPress = (event) => {
+        if (event.key === "Enter") {
+            handleSignIn();
+        }
+    };
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-900">
             <div className="bg-gray-800 p-10 rounded-lg shadow-xl w-96">
                 <h1 className="text-white text-2xl mb-5">Sign In</h1>
-                <FormInput type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <FormInput onKeyPress={handleKeyPress} type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 <div className="input-container">
-                    <FormInput type={showPassword ? "text" : "password"} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <FormInput onKeyPress={handleKeyPress} type={showPassword ? "text" : "password"} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     <span className="toggle-password" onClick={togglePasswordVisibility}>
                         {showPassword ? "Hide" : "Show"}
                     </span>

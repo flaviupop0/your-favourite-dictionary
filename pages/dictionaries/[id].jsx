@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { auth, db } from "../../app/firebase/config";
 import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
@@ -25,7 +25,6 @@ function DictionaryPage() {
     const [editedWord, setEditedWord] = useState({ name: "", definition: "" });
     const [ownerData, setOwnerData] = useState(null);
     const isOpen = Boolean(anchorEl);
-    const contentRef = useRef(null);
 
     useEffect(() => {
         const fetchDictionary = async () => {
@@ -79,8 +78,9 @@ function DictionaryPage() {
         wordElements.forEach((wordElement) => {
             const word = wordElement.textContent.toLowerCase();
             if (word === searchValue.toLowerCase()) {
+                const regex = new RegExp(`\\b${searchValue.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "gi");
                 wordElement.scrollIntoView({ behavior: "smooth", block: "center" });
-                wordElement.innerHTML = wordElement.innerHTML.replace(new RegExp(searchValue, "gi"), `<span class="highlight">${searchValue}</span>`);
+                wordElement.innerHTML = wordElement.innerHTML.replace(regex, `<span class="highlight">$&</span>`);
                 setTimeout(() => {
                     const highlightedWords = document.querySelectorAll(".highlight");
                     highlightedWords.forEach((highlightedWord) => {

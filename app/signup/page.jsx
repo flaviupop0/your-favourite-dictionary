@@ -72,16 +72,22 @@ const Register = () => {
         setShowPassword(!showPassword);
     };
 
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            handleRegister();
+        }
+    };
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-900">
             <div className="bg-gray-800 p-10 rounded-lg shadow-xl w-96">
                 <h1 className="text-white text-2xl mb-5">Sign Up</h1>
-                <FormInput type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                <FormInput type="text" placeholder="First Name" value={name} onChange={(e) => setName(e.target.value)} />
-                <FormInput type="text" placeholder="Last Name" value={surName} onChange={(e) => setSurName(e.target.value)} />
-                <FormInput type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <FormInput onKeyPress={handleKeyDown} type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                <FormInput onKeyPress={handleKeyDown} type="text" placeholder="First Name" value={name} onChange={(e) => setName(e.target.value)} />
+                <FormInput onKeyPress={handleKeyDown} type="text" placeholder="Last Name" value={surName} onChange={(e) => setSurName(e.target.value)} />
+                <FormInput onKeyPress={handleKeyDown} type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 <div className="input-container">
-                    <FormInput type={showPassword ? "text" : "password"} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <FormInput onKeyPress={handleKeyDown} type={showPassword ? "text" : "password"} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     <span className="toggle-password" onClick={togglePasswordVisibility}>
                         {showPassword ? "Hide" : "Show"}
                     </span>
@@ -89,7 +95,6 @@ const Register = () => {
                 <p className="text-red-500 mb-4">{errorMessage}</p>
                 <div className="flex justify-between">
                     <CustomButton onClick={handleRegister} disabled={!username || !name || !surName || !email || !password} className="customButton">
-                        {" "}
                         Register
                     </CustomButton>
                     <CustomButton onClick={() => router.push("/signin")} className="customButton">
