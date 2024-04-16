@@ -14,9 +14,9 @@ import { collection, query, where } from "firebase/firestore";
 import "./home.css";
 
 const Home = () => {
+    const [user] = useAuthState(auth);
     const [showModal, setShowModal] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
-    const [user] = useAuthState(auth);
     const [userDictionaries, setUserDictionaries] = useState([]);
     const [isFetchingDictionaries, setIsFetchingDictionaries] = useState(false);
     const router = useRouter();
@@ -69,7 +69,7 @@ const Home = () => {
                 {user && (
                     <>
                         <MenuButton onClick={handleClick} />
-                        <SlidingMenu anchorEl={anchorEl} open={isOpen} onClose={handleClose} firstHref="./profile" firstText="Profile" />
+                        <SlidingMenu userId={user.uid} onDictionaryCreated={handleDictionaryCreated} anchorEl={anchorEl} open={isOpen} onClose={handleClose} firstHref="./profile" firstText="Profile" />
                     </>
                 )}
                 <div className="flex flex-grow items-center justify-center">

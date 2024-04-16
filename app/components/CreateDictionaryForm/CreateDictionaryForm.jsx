@@ -8,7 +8,7 @@ const CreateDictionaryForm = ({ userId, onClose, onDictionaryCreated }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const handleCreateDictionary = async (e) => {
+    const handleCreateDictionary = async (e, newDictionary) => {
         e.preventDefault();
         setIsLoading(true);
 
@@ -43,6 +43,7 @@ const CreateDictionaryForm = ({ userId, onClose, onDictionaryCreated }) => {
             onClose();
         } catch (error) {
             console.error(error);
+            console.log(userId);
             setError("Error creating dictionary. Please try again.");
             setIsLoading(false);
         }
