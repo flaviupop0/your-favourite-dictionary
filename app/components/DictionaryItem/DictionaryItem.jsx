@@ -7,7 +7,7 @@ import { db } from "../../firebase/config";
 import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 
-function DictionaryItem({ dictionary, onDelete }) {
+function DictionaryItem({ dictionary, onDelete, userId }) {
     const [color, setColor] = useState("#f0f0f0");
     const [showColorPicker, setShowColorPicker] = useState(false);
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -72,7 +72,7 @@ function DictionaryItem({ dictionary, onDelete }) {
     return (
         <div className="relative inline-block m-2">
             <div className="p-4 border border-gray-300 rounded-lg shadow-md cursor-pointer block" style={{ width: "200px", height: "150px", verticalAlign: "top", backgroundImage: `linear-gradient(to top, #f0f0f0, ${color})` }}>
-                <Link href={`/dictionaries/${dictionary.id}`} passHref>
+                <Link href={`/dictionaries/${dictionary.id}?userId=${userId}`} passHref>
                     <div className="no-underline" style={{ marginTop: "-10px" }}>
                         <h3 className="text-lg font-semibold mb-1 text-black" style={{ overflowWrap: "break-word", wordWrap: "break-word" }}>
                             {dictionary.name}

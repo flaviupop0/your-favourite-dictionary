@@ -101,7 +101,7 @@ const Home = () => {
                         {showModal && <CreateDictionaryModal userId={user.uid} onClose={() => setShowModal(false)} onDictionaryCreated={handleDictionaryCreated} />}
                         <div className="mt-4">
                             <h2 className="text-xl font-bold mb-2">Your Dictionaries</h2>
-                            {isFetchingDictionaries ? <p>Loading...</p> : <ul className="flex flex-wrap justify-center">{userDictionaries.length === 0 ? <p>No dictionaries found.</p> : userDictionaries.map((dictionary) => <DictionaryItem key={dictionary.id} dictionary={dictionary} onDelete={handleDeleteDictionary} />)}</ul>}
+                            {isFetchingDictionaries ? <p>Loading...</p> : <ul className="flex flex-wrap justify-center">{userDictionaries.length === 0 ? <p>No dictionaries found.</p> : userDictionaries.map((dictionary) => <DictionaryItem userId={user.uid} key={dictionary.id} dictionary={dictionary} onDelete={handleDeleteDictionary} />)}</ul>}
                         </div>
                     </div>
                     <CustomButton onClick={() => setShowModal(true)} className="customButton rounded-none">

@@ -81,12 +81,16 @@ const ProfilePage = () => {
         return <div>Loading...</div>;
     }
 
+    const handleDictionaryCreated = () => {
+        router.push("/");
+    };
+
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col">
             <NavBar>
                 <>
                     <MenuButton onClick={(event) => setAnchorEl(event.currentTarget)} />
-                    <SlidingMenu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)} firstHref="/" firstText="Your dictionaries" />
+                    <SlidingMenu userId={user.uid} onDictionaryCreated={handleDictionaryCreated} anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)} firstHref="/" firstText="Your dictionaries" />
                 </>
                 <h1 className="text-center text-white text-2xl font-bold">Your profile page</h1>
                 <ul className="flex space-x-4">

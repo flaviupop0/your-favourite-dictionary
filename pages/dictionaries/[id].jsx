@@ -14,8 +14,10 @@ import "tailwindcss/tailwind.css";
 import "../../app/globals.css";
 
 function DictionaryPage() {
+    const [ownerData, setOwnerData] = useState(null);
     const router = useRouter();
     const { id } = router.query;
+    const [userId, setUserId] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
     const [dictionary, setDictionary] = useState(null);
     const [searchedIndex] = useState(-1);
@@ -23,8 +25,14 @@ function DictionaryPage() {
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [editWordIndex, setEditWordIndex] = useState(null);
     const [editedWord, setEditedWord] = useState({ name: "", definition: "" });
-    const [ownerData, setOwnerData] = useState(null);
     const isOpen = Boolean(anchorEl);
+
+    useEffect(() => {
+        const { userId } = router.query;
+        if (userId) {
+            setUserId(userId);
+        }
+    }, [router.query]);
 
     useEffect(() => {
         const fetchDictionary = async () => {
@@ -134,6 +142,10 @@ function DictionaryPage() {
         setDictionary(newDictionary);
     };
 
+    const handleDictionaryCreated = () => {
+        router.push("/");
+    };
+
     if (!dictionary) {
         return <div>Loading...</div>;
     }
@@ -143,7 +155,7 @@ function DictionaryPage() {
             <Navbar>
                 <>
                     <MenuButton onClick={handleClick} className="customIcons text-white" />
-                    <SlidingMenu anchorEl={anchorEl} open={isOpen} onClose={handleClose} firstHref="../" firstText="Home" secondHref="../profile" secondText="Profile" />
+                    <SlidingMenu userId={userId} onDictionaryCreated={handleDictionaryCreated} anchorEl={anchorEl} open={isOpen} onClose={handleClose} firstHref="../" firstText="Home" secondHref="../profile" secondText="Profile" />
                 </>
                 <h1 className="text-center text-white text-2xl font-bold">{dictionary.name}</h1>
                 <ul className="flex space-x-4">

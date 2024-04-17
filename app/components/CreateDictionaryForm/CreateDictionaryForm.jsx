@@ -43,7 +43,6 @@ const CreateDictionaryForm = ({ userId, onClose, onDictionaryCreated }) => {
             onClose();
         } catch (error) {
             console.error(error);
-            console.log(userId);
             setError("Error creating dictionary. Please try again.");
             setIsLoading(false);
         }
